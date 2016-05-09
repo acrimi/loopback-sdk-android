@@ -238,20 +238,27 @@ public class UserRepository<U extends User> extends ModelRepository<U> {
 
                     @Override
                     public void onSuccess(JSONObject response) {
-                        AccessToken token = getAccessTokenRepository()
-                                .createObject(JsonUtil.fromJson(response));
-                        getRestAdapter().setAccessToken(token.getId().toString());
-
-                        JSONObject userJson = response.optJSONObject("user");
-                        U user = userJson != null
-                                ? createObject(JsonUtil.fromJson(userJson))
-                                : null;
-
-                        setCurrentUserId(token.getUserId());
-                        cachedCurrentUser = user;
-                        callback.onSuccess(token, user);
+                        handleLoginResponse(response, callback);
                     }
                 });
+    }
+
+    protected void handleLoginResponse(JSONObject response, LoginCallback<U> callback) {
+        handleLoginResponse(response, response.optJSONObject("user"), callback);
+    }
+
+    protected void handleLoginResponse(JSONObject accessTokenObject, JSONObject userObject, LoginCallback<U> callback) {
+        AccessToken token = getAccessTokenRepository()
+            .createObject(JsonUtil.fromJson(accessTokenObject));
+        getRestAdapter().setAccessToken(token.getId().toString());
+
+        U user = userObject != null
+            ? createObject(JsonUtil.fromJson(userObject))
+            : null;
+
+        setCurrentUserId(token.getUserId());
+        cachedCurrentUser = user;
+        callback.onSuccess(token, user);
     }
 
     /**
