@@ -25,6 +25,7 @@ import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpResponseException;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.entity.AbstractHttpEntity;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -227,21 +228,23 @@ public class RestAdapter extends Adapter {
                               Header[] headers,
                               byte[] responseBody,
                               java.lang.Throwable error) {
-            if (Log.isLoggable(TAG, Log.WARN)) {
-                String message;
-                if (error != null) {
-                    message = error.toString();
-                } else {
-                    message = statusCode + "\n";
-                    try {
-                        message += new String(responseBody, getCharset());
-                    } catch (UnsupportedEncodingException e) {
-                        message += new String(responseBody);
-                    }
-                }
-                Log.w(TAG, "HTTP request (string) failed: " + message);
+            String responseString = "";
+            try {
+                responseString += new String(responseBody, getCharset());
+            } catch (UnsupportedEncodingException e) {
+                responseString += new String(responseBody);
             }
-            callback.onError(error);
+
+            Throwable detailError = new HttpResponseException(statusCode, responseString);
+            if (error != null) {
+                detailError.setStackTrace(error.getStackTrace());
+                detailError.initCause(error);
+            }
+
+            if (Log.isLoggable(TAG, Log.WARN)) {
+                Log.w(TAG, "HTTP request (string) failed: " + detailError.toString());
+            }
+            callback.onError(detailError);
         }
     }
 
