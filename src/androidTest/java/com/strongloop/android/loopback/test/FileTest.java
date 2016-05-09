@@ -15,11 +15,11 @@ import com.strongloop.android.remoting.adapters.RestContractItem;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.http.client.HttpResponseException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.client.HttpResponseException;
 
 public class FileTest extends AsyncTestCase {
     static final private String TAG = "FileTest";

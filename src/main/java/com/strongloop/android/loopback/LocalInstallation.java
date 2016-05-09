@@ -10,11 +10,12 @@ import com.strongloop.android.loopback.callbacks.VoidCallback;
 import com.strongloop.android.remoting.BeanUtil;
 import com.strongloop.android.remoting.Transient;
 
-import org.apache.http.client.HttpResponseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.TimeZone;
+
+import cz.msebera.android.httpclient.client.HttpResponseException;
 
 /**
  * This class represents the Installation instance assigned to

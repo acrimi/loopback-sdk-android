@@ -14,13 +14,6 @@ import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.strongloop.android.remoting.JsonUtil;
 
-import org.apache.http.Header;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.entity.AbstractHttpEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
 import java.io.FileNotFoundException;
@@ -29,6 +22,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.entity.AbstractHttpEntity;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 /**
  * A specific {@link Adapter} implementation for RESTful servers.
@@ -223,7 +224,7 @@ public class RestAdapter extends Adapter {
 
         @Override
         public void onFailure(int statusCode,
-                              org.apache.http.Header[] headers,
+                              Header[] headers,
                               byte[] responseBody,
                               java.lang.Throwable error) {
             if (Log.isLoggable(TAG, Log.WARN)) {
@@ -254,7 +255,7 @@ public class RestAdapter extends Adapter {
 
         @Override
         public void onFailure(int statusCode,
-                              org.apache.http.Header[] headers,
+                              Header[] headers,
                               byte[] responseBody,
                               java.lang.Throwable error) {
             if (Log.isLoggable(TAG, Log.WARN)) {
@@ -450,14 +451,8 @@ public class RestAdapter extends Adapter {
                         // FIXME(bajtos) we should rethrow
                         Log.e(TAG, "Couldn't convert parameters to JSON", e);
                     }
-                    try {
-                        body = new StringEntity(s, charset);
-                        body.setContentType("application/json; charset=" + charset);
-                    }
-                    catch (UnsupportedEncodingException e) {
-                        // Won't happen
-                        Log.e(TAG, "Couldn't encode JSON params", e);
-                    }
+                    body = new StringEntity(s, charset);
+                    body.setContentType("application/json; charset=" + charset);
                 }
 
             }

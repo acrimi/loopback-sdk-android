@@ -33,11 +33,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '22.0.1'
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 21
+        targetSdkVersion 23
     }
     compileOptions {
         encoding 'UTF-8'
@@ -49,7 +49,7 @@ android {
 dependencies {
     compile 'org.atteo:evo-inflector:1.2'
     compile 'com.google.guava:guava:18.0'
-    compile 'com.loopj.android:android-async-http:1.4.6'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }
 
 task unpackJavadocIncludes(type: Sync) {
