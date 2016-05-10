@@ -264,19 +264,24 @@ public class RestAdapter extends Adapter {
                               Header[] headers,
                               byte[] responseBody,
                               java.lang.Throwable error) {
-            if (Log.isLoggable(TAG, Log.WARN)) {
-                String message;
-                if (error != null) {
-                    message = error.toString();
-                } else {
-                    message = statusCode + "\n";
-                    try {
-                        message += new String(responseBody, getCharset());
-                    } catch (UnsupportedEncodingException e) {
-                        message += new String(responseBody);
-                    }
+            if (responseBody != null && responseBody.length > 0) {
+                String responseString = "";
+                try {
+                    responseString += new String(responseBody, getCharset());
+                } catch (UnsupportedEncodingException e) {
+                    responseString += new String(responseBody);
                 }
-                Log.w(TAG, "HTTP request (binary) failed: " + message);
+
+                Throwable detailError = new HttpResponseException(statusCode, responseString);
+                if (error != null) {
+                    detailError.setStackTrace(error.getStackTrace());
+                    detailError.initCause(error);
+                }
+                error = detailError;
+            }
+
+            if (Log.isLoggable(TAG, Log.WARN) && error != null) {
+                Log.w(TAG, "HTTP request (binary) failed: " + error.toString());
             }
             callback.onError(error);
         }
