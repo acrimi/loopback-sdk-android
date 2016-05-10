@@ -19,7 +19,7 @@ import org.apache.commons.io.FilenameUtils
 import org.gradle.internal.jvm.Jvm;
 
 def isReleaseBuild = !version.contains('SNAPSHOT')
-def shouldPublishToMavenCentral = isReleaseBuild
+def shouldPublishToMavenCentral = false
 
 logger.info('**JVM VERSION** ' + Jvm.current())
 
@@ -188,7 +188,7 @@ afterEvaluate { project ->
             mavenDeployer {
                 pom.groupId = 'com.isbx'
                 pom.artifactId = 'loopback-sdk-android'
-                pom.version = android.defaultConfig.versionName
+                pom.version = version
                 // Add other pom properties here if you want (developer details / licenses)
                 repository(url: "file:./artifacts/")
             }

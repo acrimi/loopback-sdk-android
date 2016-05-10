@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.isbx</groupId>
+  <artifactId>loopback-sdk-android</artifactId>
+  <version>1.6.1-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20160510.004333</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20160510004333</lastUpdated>
+  </versioning>
+</metadata>
