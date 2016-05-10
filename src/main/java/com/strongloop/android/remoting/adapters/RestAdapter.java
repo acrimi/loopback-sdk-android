@@ -228,23 +228,26 @@ public class RestAdapter extends Adapter {
                               Header[] headers,
                               byte[] responseBody,
                               java.lang.Throwable error) {
-            String responseString = "";
-            try {
-                responseString += new String(responseBody, getCharset());
-            } catch (UnsupportedEncodingException e) {
-                responseString += new String(responseBody);
+            if (responseBody != null && responseBody.length > 0) {
+                String responseString = "";
+                try {
+                    responseString += new String(responseBody, getCharset());
+                } catch (UnsupportedEncodingException e) {
+                    responseString += new String(responseBody);
+                }
+
+                Throwable detailError = new HttpResponseException(statusCode, responseString);
+                if (error != null) {
+                    detailError.setStackTrace(error.getStackTrace());
+                    detailError.initCause(error);
+                }
+                error = detailError;
             }
 
-            Throwable detailError = new HttpResponseException(statusCode, responseString);
-            if (error != null) {
-                detailError.setStackTrace(error.getStackTrace());
-                detailError.initCause(error);
+            if (Log.isLoggable(TAG, Log.WARN) && error != null) {
+                Log.w(TAG, "HTTP request (string) failed: " + error.toString());
             }
-
-            if (Log.isLoggable(TAG, Log.WARN)) {
-                Log.w(TAG, "HTTP request (string) failed: " + detailError.toString());
-            }
-            callback.onError(detailError);
+            callback.onError(error);
         }
     }
 
