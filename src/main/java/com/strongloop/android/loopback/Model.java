@@ -98,7 +98,7 @@ public class Model extends VirtualObject {
      * @param callback The callback to be executed when finished.
      */
     public void save(final VoidCallback callback) {
-        invokeMethod(id == null ? "create" : "save", toMap(),
+        invokeMethod(getId() == null ? "create" : "save", toMap(),
                 new Adapter.JsonObjectCallback() {
 
             @Override
