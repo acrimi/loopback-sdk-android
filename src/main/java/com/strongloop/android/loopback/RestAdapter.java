@@ -33,6 +33,7 @@ public class RestAdapter
     }
 
     public void clearAccessToken() {
+        saveAccessToken(null);
         getClient().addHeader("Authorization", null);
     }
 
