@@ -26,6 +26,7 @@ public class Model extends VirtualObject {
     }
 
     private Object id;
+    private String customIdName;
     private Map<String, Object> overflow = new HashMap<String, Object>();
 
     public Model(Repository repository,
@@ -38,14 +39,29 @@ public class Model extends VirtualObject {
     }
 
     /**
+     * Gets the custom model's name id field.
+     * @return The id name string.
+     */
+    public String getCustomIdName() {
+        return customIdName;
+    }
+
+    protected void setCustomIdName(String customIdName) {
+        this.customIdName = customIdName;
+    }
+
+    /**
      * Gets the model's id field.
      * @return The id.
      */
     public Object getId() {
+        if (id == null && customIdName != null) {
+            id = overflow.get(customIdName);
+        }
         return id;
     }
 
-    /* package private */ void setId(Object id) {
+    protected void setId(Object id) {
         this.id = id;
     }
 
@@ -86,6 +102,9 @@ public class Model extends VirtualObject {
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(overflow);
         map.put("id", getId());
+        if (customIdName != null) {
+            map.put(customIdName, getId());
+        }
         map.putAll(super.toMap());
         return map;
     }
